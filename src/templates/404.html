@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block app_content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2>404 - 页面未找到</h2>
+            <p>抱歉，您访问的页面不存在。</p>
+            {% if message %}
+            <p>{{ message }}</p>
+            {% endif %}
+            <a href="/" class="btn btn-primary">返回首页</a>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

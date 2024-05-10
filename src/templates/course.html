@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <h2>课程详情</h2>
+    <div class="text-right mb-3">
+        <a href="#" onclick="history.go(-1);" class="btn btn-outline-primary btn-lg">返回</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">课程编号：</dt>
+                <dd class="col-sm-8">{{ course.code }}</dd>
+
+                <dt class="col-sm-4">课程名称：</dt>
+                <dd class="col-sm-8">{{ course.name }}</dd>
+
+                <dt class="col-sm-4">课程学分：</dt>
+                <dd class="col-sm-8">{{ course.credit }}</dd>
+
+                <dt class="col-sm-4">主讲老师：</dt>
+                <dd class="col-sm-8">{{ course.teacher }}</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

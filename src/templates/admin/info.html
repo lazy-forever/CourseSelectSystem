@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block app_content %}
+<table border="1" class="table table-striped">
+    <tr>
+        <th>课程</th>
+        <th>课程代码</th>
+        <th>操作</th>
+
+    </tr>
+    {% for course in courses %}
+    <tr>
+        <td>{{ course.name }}</td>
+        <td>{{ course.code }}</td>
+        <td>
+            <a href="/admin/course/{{ course.code }}" class="btn btn-info" role="button">查看选课详情</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

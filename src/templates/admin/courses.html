@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+{% block app_content %}
+<table border="1" class="table table-striped">
+    <tr>
+        <th>课程编号</th>
+        <th>课程名</th>
+        <th>课程学分</th>
+        <th>课程主讲老师</th>
+    </tr>
+    {% for course in courses %}
+
+    <tr>
+        <td>{{ course.code }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.credit }}</td>
+        <td>{{ course.teacher }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

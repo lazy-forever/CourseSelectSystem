@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  # MySQL 服务
+  mysql:
+    image: mysql:5.7
+    restart: always
+    container_name : mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DB: course
+    command: ["--ssl=0"]
+
+  # Python 应用服务
+  python-app:
+    restart: always
+    build:
+      context: .
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"

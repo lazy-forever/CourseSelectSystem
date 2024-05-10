@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+
+
+{% block app_content %}
+<div class="d-flex justify-content-end mb-3">
+    <a href="/admin/add" class="btn btn-primary" role="button">添加课程</a>
+</div>
+<table border="1" class="table table-striped">
+    <tr>
+        <th>课程编号</th>
+        <th>课程名</th>
+        <th>课程学分</th>
+        <th>操作</th>
+    </tr>
+    {% for course in courses %}
+
+    <tr>
+        <td>{{ course.code }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.credit }}</td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="deleteCourse('{{ course.code }}')">删除课程</button>
+            <a href="/admin/editor/{{ course.code }}" class="btn btn-info" role="button">编辑课程</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+    function deleteCourse(courseCode) {
+        fetch(`/admin/delete/${courseCode}`, {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}

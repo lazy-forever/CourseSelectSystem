@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block app_content %}
+<table border="1" class="table table-striped">
+    <tr>
+        <th>课程编号</th>
+        <th>课程名</th>
+        <th>课程学分</th>
+        <th>课程主讲老师</th>
+        <th>操作</th> <!-- 添加一个新的表头列用于放置按钮 -->
+    </tr>
+    {% for course in courses %}
+
+    <tr>
+        <td>{{ course.code }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.credit }}</td>
+        <td>{{ course.teacher }}</td>
+        <td> <!-- 在这一列中放置按钮 -->
+            <button type="button" class="btn btn-primary" onclick="selectCourse('{{ course.code }}')">抢课</button>
+            <a href="/course/{{ course.code }}" class="btn btn-info" role="button">查看课程详情</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+    function selectCourse(courseCode) {
+        fetch(`/select/${courseCode}`, {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // 弹出服务器返回的 message
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}

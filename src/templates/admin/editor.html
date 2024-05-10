@@ -1,0 +1,43 @@
+{% extends 'admin/base.html' %}
+
+{% block app_content %}
+<div class="row justify-content-center">
+    <div class="card-body" style="width: 50%; margin: 0 auto;">
+        <h1 class="card-title text-center mb-4">编辑课程信息</h1>
+        <div class="form-group">
+            <label for="name">课程名</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="请输入课程名">
+        </div>
+        <div class="form-group">
+            <label for="credit">学分</label>
+            <input type="text" class="form-control" id="credit" name="credit" placeholder="请输入学分">
+        </div>
+        <!-- 可根据需要添加其他课程信息输入框 -->
+        <button type="submit" class="btn btn-primary btn-block" onclick="editor('{{course.code}}')">提交</button>
+    </div>
+</div>
+<script>
+    function editor(courseCode) {
+        const name = document.getElementById('name').value;
+        const credit = document.getElementById('credit').value;
+        fetch(`/admin/editor/${courseCode}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                credit: credit
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.href = '/admin/mycourses';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}

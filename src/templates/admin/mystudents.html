@@ -1,0 +1,66 @@
+{% extends "admin/base.html" %}
+{% block app_content %}
+<div class="col-md-6 text-center">
+    <h2>{{course.name}}</h2>
+    <br>
+    <h3>课程代码: {{course.code}}</h3>
+</div>
+<table border="1" class="table table-striped">
+    <tr>
+        <th>学号</th>
+        <th>学生姓名</th>
+        <th>分数</th>
+        <th>操作</th>
+    </tr>
+    {% for i in choose %}
+    <tr>
+        <td>{{ i.student.num }}</td>
+        <td>{{ i.student.name }}</td>
+        <td>{{ i.score }}</td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="deleteChoose('{{ i.student.num }}')">踢出</button>
+            <button type="button" class="btn btn-info" onclick="editScore('{{ i.student.num }}')">修改分数</button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+    function deleteChoose(studentNum) {
+        fetch(`/admin/deleteChoose/{{course.code}}/${studentNum}`, {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function editScore(studentNum) {
+        let score = prompt("请输入分数");
+        if (score == null) {
+            return;
+        }
+        fetch(`/admin/editScore/{{course.code}}/${studentNum}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                score: score
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}

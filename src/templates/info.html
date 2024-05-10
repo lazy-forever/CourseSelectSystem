@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block app_content %}
+<table border="1" class="table table-striped">
+    <tr>
+        <th>选课课程</th>
+        <th>课程代码</th>
+        <th>课程学分</th>
+        <th>课程主讲老师</th>
+        <th>分数</th>
+        <th>操作</th>
+
+    </tr>
+    {% for select in selects %}
+    <tr>
+        <td>{{ select.course.name }}</td>
+        <td>{{ select.course.code }}</td>
+        <td>{{ select.course.credit }}</td>
+        <td>{{ select.course.teacher }}</td>
+        {% if select.score %}
+        <td>{{ select.score }}</td>
+        {% else %}
+        <td>null</td>
+        {% endif %}
+        <td>
+            <button type="button" class="btn btn-primary" onclick="deleteCourse('{{ select.course.code }}')">退课</button>
+            <a href="/course/{{ select.course.code }}" class="btn btn-info" role="button">查看课程详情</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<script>
+    function deleteCourse(courseCode) {
+        fetch(`/delete/${courseCode}`, {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+{% endblock %}

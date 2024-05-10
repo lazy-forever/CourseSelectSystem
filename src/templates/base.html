@@ -1,0 +1,58 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}学生选课系统{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+				data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">学生选课系统</a>
+		</div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li><a href="/courses">查询课程信息</a></li>
+				<li><a href="/info">查询选课结果</a></li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right">
+				{% if not session.get("num") %}
+				<li><a href="/admin/login">管理员登录</a></li>
+				{% else %}
+				<li><a href="/">{{session.get("num")}}</a></li>
+				<li><a href="/logout">注销</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-info" role="alert">{{ message }}</div>
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
+
+
+	{% block app_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.6.0.min.js')}}"></script>
+
+{% endblock %}
