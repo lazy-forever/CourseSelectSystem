@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="container">
+    <h2>项目详情</h2>
+    <div class="text-right mb-3">
+        <a href="#" onclick="history.go(-1);" class="btn btn-outline-primary btn-lg">返回</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-4">项目编号：</dt>
+                <dd class="col-sm-8">{{ project.id }}</dd>
+
+                <dt class="col-sm-4">项目名称：</dt>
+                <dd class="col-sm-8">{{ project.name }}</dd>
+
+                <dt class="col-sm-4">项目状态：</dt>
+                <dd class="col-sm-8">{{ project.status }}</dd>
+
+                <dt class="col-sm-4">项目指导老师：</dt>
+                <dd class="col-sm-8">{{ project.teacher.name }}</dd>
+
+                <dt class="col-sm-4">项目地址：</dt>
+                <dd class="col-sm-8"><a href="{{ project.url }}">{{ project.url }}</a></dd>
+
+                <dt class="col-sm-4">项目logo：</dt>
+                <dd class="col-sm-8"><img src="{{ project.imgurl }}"></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

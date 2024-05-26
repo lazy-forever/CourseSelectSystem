@@ -1,10 +1,19 @@
 import pymysql
+import os
+env_host = os.getenv('MYSQL_HOST')
+host= env_host if env_host == None else '127.0.0.1'
+host='mysql'
+user='root'
+password='password'
+charset='utf8mb4'
+database='course'
 
-connection = pymysql.connect(host='mysql',
-                             user='root',
-                             password='password',
-                             charset='utf8mb4',
+connection = pymysql.connect(host=host,
+                             user=user,
+                             password=password,
+                             charset=charset,
                              cursorclass=pymysql.cursors.DictCursor)
+
 
 try:
     with connection.cursor() as cursor:
@@ -55,6 +64,23 @@ try:
               CONSTRAINT snum_fk FOREIGN KEY (num) REFERENCES students (num)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
         """)
+
+        cursor.execute("""
+            CREATE TABLE `projects` (
+                `id` int NOT NULL AUTO_INCREMENT,
+                `snum` int NOT NULL,
+                `tnum` int DEFAULT NULL,
+                `name` varchar(255) DEFAULT NULL,
+                `imgurl` varchar(255) DEFAULT NULL,
+                `url` varchar(255) DEFAULT NULL,
+                `status` varchar(255) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `psnum` (`snum`),
+                KEY `ptnum` (`tnum`),
+                CONSTRAINT `psnum` FOREIGN KEY (`snum`) REFERENCES `students` (`num`),
+                CONSTRAINT `ptnum` FOREIGN KEY (`tnum`) REFERENCES `teachers` (`num`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+        """)
         
         # 插入示例数据
         cursor.executemany("""
@@ -72,6 +98,10 @@ try:
         cursor.executemany("""
             INSERT INTO selects (num, code, score) VALUES (%s, %s, %s)
         """, [(1, 'CS101', 85), (2, 'MATH201', 78), (3, 'CS101', 92), (1, 'MATH201', 80)])
+
+        cursor.executemany("""
+            INSERT INTO `projects` (`snum`, `tnum`, `name`, `imgurl`, `url`, `status`) VALUES (%s,%s,%s,%s,%s,%s)
+        """, [( 1, 101, 'Apache', 'https://apache.org/img/asf-estd-1999-logo.jpg', 'https://apache.org/', '已结束' )])
         
     # 提交更改
     connection.commit()
@@ -83,7 +113,7 @@ finally:
 
 
 def runSql(sql):
-    conn = pymysql.connect(host='mysql', user='root', password='password', database='course', charset='utf8mb4')
+    conn = pymysql.connect(host=host, user=user, password=password, database=database, charset=charset)
     cursor = conn.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -91,3 +121,10 @@ def runSql(sql):
     conn.commit()
     conn.close()
     return result
+
+if __name__ == '__main__':
+    print(runSql('select * from students'))
+    print(runSql('select * from teachers'))
+    print(runSql('select * from course'))
+    print(runSql('select * from selects'))
+    print(runSql('select * from projects'))

@@ -16,6 +16,8 @@ services:
     restart: always
     build:
       context: .
+    environment:
+      MYSQL_HOST: mysql
     depends_on:
       - mysql
     ports:

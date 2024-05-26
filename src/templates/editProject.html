@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+<div class="row justify-content-center">
+    <div class="card-body" style="width: 50%; margin: 0 auto;">
+        <h1 class="card-title text-center mb-4">编辑项目信息</h1>
+        <div class="form-group">
+            <label for="name">项目名</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="请输入项目名">
+        </div>
+        <div class="form-group">
+            <label for="status">项目状态</label>
+            <input type="text" class="form-control" id="status" name="status" placeholder="请输入状态">
+        </div>
+        <div class="form-group">
+            <label for="url">项目地址</label>
+            <input type="text" class="form-control" id="url" name="url" placeholder="请输入url">
+        </div>
+        <div class="form-group">
+            <label for="imgurl">logo地址</label>
+            <input type="text" class="form-control" id="imgurl" name="imgurl" placeholder="请输入url">
+        </div>
+        <!-- 可根据需要添加其他课程信息输入框 -->
+        <button type="submit" class="btn btn-primary btn-block" onclick="editor('{{id}}')">提交</button>
+    </div>
+</div>
+<script>
+    function editor(projectId) {
+        const name = document.getElementById('name').value;
+        const status = document.getElementById('status').value;
+        const url = document.getElementById('url').value;
+        const imgurl = document.getElementById('imgurl').value;
+        fetch(`/editProject/${projectId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                status: status,
+                url: url,
+                imgurl: imgurl
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.href = '/projects';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}

@@ -65,3 +65,20 @@ INSERT INTO selects (num, code, score) VALUES
 (2, 'MATH201', 78),
 (3, 'CS101', 92),
 (1, 'MATH201', 80);
+
+DELIMITER //
+
+CREATE TRIGGER before_student_insert
+BEFORE INSERT ON students
+FOR EACH ROW
+BEGIN
+  DECLARE msg VARCHAR(255);
+  IF EXISTS (SELECT 1 FROM students WHERE num = NEW.num) THEN
+    SET msg = CONCAT('Duplicate entry for num: ', NEW.num);
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
+  END IF;
+END;
+
+//
+
+DELIMITER ;

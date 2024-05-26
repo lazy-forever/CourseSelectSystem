@@ -76,7 +76,37 @@ def delete(code):
             return jsonify({"message":"error"})
     return jsonify({"message":"error"})
 
+@app.route('/projects')
+def projects():
+    if session.get('num') is not None and session.get('is_admin') is False:
+        projects = projects_showSql(session['num'])
+        return render_template('projects.html', projects=projects)
+    return redirect(url_for('login'))
 
+@app.route('/exitProject/<id>', methods=['POST'])
+def exit_project(id):
+    if session.get('num') is not None and session.get('is_admin') is False:
+        if exit_projectSql(session.get('num'), id):
+            return jsonify({"message":"success"})
+        else:
+            return jsonify({"message":"error"})
+    return jsonify({"message":"error"})
+
+@app.route('/editProject/<id>', methods=['POST', 'GET'])
+def edit_project(id):
+    if request.method == 'GET':
+        if session.get('num') is not None and session.get('is_admin') is False:
+            return render_template('editProject.html', id=id)
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        if session.get('num') is not None and session.get('is_admin') is False:
+            name = request.json['name']
+            imgurl = request.json['imgurl']
+            url = request.json['url']
+            if edit_projectSql(session.get('num'), id, name, imgurl, url):
+                return jsonify({"message":"success"})
+            return jsonify({"message":"error"})
+        return jsonify({"message":"error"})
 
 
 

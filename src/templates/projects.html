@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<!-- <div class="d-flex justify-content-end mb-3">
+    <a href="/addProject" class="btn btn-primary" role="button">添加项目</a>
+</div> -->
+<table border="1" class="table table-striped">
+    <tr>
+        <th>项目编号</th>
+        <th>项目名</th>
+        <th>项目指导老师</th>
+        <th>项目状态</th>
+        <th>操作</th>
+    </tr>
+    {% for project in projects %}
+
+    <tr>
+        <td>{{ project.id }}</td>
+        <td>{{ project.name }}</td>
+        <td>{{ project.teacher.name }}</td>
+        <td>{{ project.status }}</td>
+        <td> <!-- 在这一列中放置按钮 -->
+            <button type="button" class="btn btn-primary" onclick="exitProject('{{ project.id }}')">退出项目</button>
+            <a href="/editProject/{{ project.id }}" class="btn btn-info" role="button">编辑项目</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+    function exitProject(projectId) {
+        fetch(`/exitProject/${projectId}`, {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // 弹出服务器返回的 message
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}
