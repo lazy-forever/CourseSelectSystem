@@ -244,6 +244,19 @@ def register():
             return render_template('register.html', message='注册成功')
         else:
             return render_template('register.html', message='注册失败')
+        
+@app.route('/admin/update', methods=['GET', 'POST'])
+def admin_update():
+    if session.get('num') is not None and session.get('is_admin') is True:
+        if request.method == 'GET':
+            return render_template('admin/update.html')
+        else:
+            new_num = request.form['num']
+            if admin_updateSql(session['num'], new_num):
+                return render_template('admin/update.html', message='修改成功')
+            else:
+                return render_template('admin/update.html', message='修改失败')
+    return redirect(url_for('admin_login'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8080,debug=True)

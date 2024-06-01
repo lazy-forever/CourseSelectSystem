@@ -82,3 +82,63 @@ END;
 //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER before_course_delete
+BEFORE DELETE ON `course`
+FOR EACH ROW
+BEGIN
+    DELETE FROM `selects` WHERE `code` = OLD.`code`;
+END;
+
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER before_teacher_update
+BEFORE UPDATE ON `teachers`
+FOR EACH ROW
+BEGIN
+    -- 禁用外键检查
+    SET FOREIGN_KEY_CHECKS = 0;
+    
+    -- 更新相关表中的外键
+    UPDATE `course` SET `num` = NEW.`num` WHERE `num` = OLD.`num`;
+    UPDATE `projects` SET `tnum` = NEW.`num` WHERE `tnum` = OLD.`num`;
+    
+    -- 启用外键检查
+    SET FOREIGN_KEY_CHECKS = 1;
+END;
+
+//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE update_teacher_num(
+    IN old_num INT,
+    IN new_num INT
+)
+BEGIN
+    -- 禁用外键检查
+    SET FOREIGN_KEY_CHECKS = 0;
+    
+    -- 更新相关表中的外键
+    UPDATE `course` SET `num` = new_num WHERE `num` = old_num;
+    UPDATE `projects` SET `tnum` = new_num WHERE `tnum` = old_num;
+    
+    -- 更新 teachers 表
+    UPDATE `teachers` SET `num` = new_num WHERE `num` = old_num;
+    
+    -- 启用外键检查
+    SET FOREIGN_KEY_CHECKS = 1;
+END;
+
+//
+
+DELIMITER ;

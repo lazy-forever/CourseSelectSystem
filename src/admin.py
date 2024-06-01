@@ -58,7 +58,10 @@ def delete_courseSql(code):
 
 def choose_showSql(code):
     # return a course of all student
-    sql = "SELECT s.num, s.name, c.name, c.code, se.score FROM students s JOIN selects se ON s.num = se.num JOIN course c ON se.code = c.code WHERE c.code = '%s';" % code
+    # sql = "SELECT s.num, s.name, c.name, c.code, se.score FROM students s JOIN selects se ON s.num = se.num JOIN course c ON se.code = c.code WHERE c.code = '%s';" % code
+    sql = """SELECT num, student_name, course_name, code, score
+FROM student_course_scores
+WHERE code = '%s';""" % code
     result = runSql.runSql(sql)
     chooses = []
     for row in result:
@@ -89,6 +92,16 @@ def edit_scoreSql(num, code, score):
 def registerSql(num, name, password):
     # register a student
     sql = "insert into students values ('%s', '%s', '%s')" % (num, name, password)
+    try:
+        runSql.runSql(sql)
+    except Exception as e:
+        print(e)
+        return False
+    return True
+
+def admin_updateSql(num, new_num):
+    # update a teacher's num
+    sql = "call update_teacher_num(%s, %s)" % (num, new_num)
     try:
         runSql.runSql(sql)
     except Exception as e:

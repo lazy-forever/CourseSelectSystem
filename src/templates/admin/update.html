@@ -1,0 +1,23 @@
+{% extends 'admin/base.html' %}
+
+{% block app_content %}
+<div class="row justify-content-center">
+    <div class="card-body" style="width: 50%; margin: 0 auto;">
+        <h1 class="card-title text-center mb-4">修改学工号</h1>
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endif %}
+        <form method="post">
+            <div class="form-group">
+                <label for="num">学工</label>
+                <input type="text" class="form-control" id="num" name="num" placeholder="请输入号码">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">修 改</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
